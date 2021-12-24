@@ -1,14 +1,14 @@
 package com.ooad.admin.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="student")
 public class Student {
 
+    //    定义主键id
     @Id
     private String id;
 
@@ -51,4 +51,5 @@ public class Student {
         this.name = name;
         this.year = year;
     }
+
 }
