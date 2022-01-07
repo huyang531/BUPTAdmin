@@ -23,8 +23,8 @@ public class Student {
     @Column(name="province")
     private String province;
 
-    @Column(name="ID")//命名有大写情况的时候可能会出现传入null值的问题，
-    //// 这个时候需要改名或者在getter和setter加上notation" @JsonProperty(value = "ID") "
+    @Column(name="ID")//命名有在特定情况下的时候可能会出现传入null值的问题，//// 这个时候需要改名或者添加 @JsonProperty(value = "ID") "
+    @JsonProperty(value = "ID")
     private String ID;
 
     @Column(name="department")
@@ -61,11 +61,9 @@ public class Student {
     public void setProvince(String province) {
         this.province = province;
     }
-    @JsonProperty(value = "ID")
     public String getID() {
         return ID;
     }
-    @JsonProperty(value = "ID")
     public void setID(String ID) {
         this.ID = ID;
     }
