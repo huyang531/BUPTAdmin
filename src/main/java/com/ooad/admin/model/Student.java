@@ -1,14 +1,20 @@
 package com.ooad.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="student")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
-
     //    定义主键id
     @Id
     @Column(name="sid")
@@ -29,66 +35,4 @@ public class Student {
 
     @Column(name="department")
     private String department;
-
-    public String getSid() {
-        return sid;
-    }
-
-    public void setSid(String sid) {
-        this.sid = sid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-    public String getID() {
-        return ID;
-    }
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public Student(String sid, String name, String sex, String province, String ID, String department) {
-        this.sid = sid;
-        this.name = name;
-        this.sex = sex;
-        this.province = province;
-        this.ID = ID;
-        this.department = department;
-    }
-
-    public Student() {
-
-    }
-
-
-
 }
