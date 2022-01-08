@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>选课</title>
+	    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- ------------- 检索参数 ------------- -->
+				<div class="c-title">检索参数</div>
+				<el-form @submit.native.prevent >
+					<sa-item name="名称查询" v-model="p.name" placeholder="模糊查询"></sa-item>
+					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+				</el-form>
+				<!-- ------------- 数据列表 ------------- -->
+				<el-table class="data-table" ref="data-table" :data="dataList">
+					<sa-td name="课程名称" prop="name"></sa-td>
+					<sa-td name="任课老师" prop="teacher"></sa-td>
+					<sa-td name="学年" prop="year"></sa-td>
+					<sa-td name="上课地点" prop="classroom"></sa-td>
+					<el-table-column label="上课时间" width="190px" >
+						<template slot-scope="s">
+							<el-tag size="small" effect="plain" v-if="s.row.time.indexOf('1') > -1">周一</el-tag>
+							<el-tag size="small" effect="plain" v-if="s.row.time.indexOf('2') > -1">周二</el-tag>
+							<el-tag size="small" effect="plain" v-if="s.row.time.indexOf('3') > -1">周三</el-tag>
+							<el-tag size="small" effect="plain" v-if="s.row.time.indexOf('4') > -1">周四</el-tag>
+							<el-tag size="small" effect="plain" v-if="s.row.time.indexOf('5') > -1">周五</el-tag>
+						</template>
+					</el-table-column>					
+					<sa-td name="可选人数" prop="num"></sa-td>
+					<sa-td name="已选人数" prop="num_selected"></sa-td>
+					<sa-td type="j" name="状态" prop="status" :jv="{1: '已选上[green]', 2: '未选[red]'}"></sa-td>
+					<sa-td type="switch" prop="status" :jv="{1: '已选上', 2: '未选'}"></sa-td>
+				</el-table>
+				<!-- ------------- 分页 ------------- -->
+				<sa-item type="page" :curr.sync="p.pageNo" :size.sync="p.pageSize" :total="dataList.length" @change="f5()"></sa-item>
+			</div>
+		</div>
+		<script src="data.js"></script>
+        <script>
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),  
+					"sa-td": httpVueLoader('../../sa-frame/com/sa-td.vue')
+				},
+				el: '.vue-box',
+				data: {
+					p: {		// 查询参数  
+						name: '',
+						pageNo: 1,
+						pageSize: 10,
+					},
+					dataList: [],		// 数据集合
+				},
+				methods: {
+					// 刷新
+					f5: function(){
+						sa.ajax2('/goods/getList', this.p, function(res){
+							this.dataList = res.data;	// 数据
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this), {res: mockDataList});
+					}
+				},
+				created: function(){
+					this.f5();
+					sa.onInputEnter();		// 监听输入框的回车事件，执行查询  
+				}
+			})
+			
+		</script>
+	</body>
+</html>

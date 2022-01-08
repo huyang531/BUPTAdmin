@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>教室管理</title>
+	    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- ------------- 检索参数 ------------- -->
+				<div class="c-title">检索参数</div>
+				<el-form @submit.native.prevent>
+					<sa-item name="教室编号" v-model="p.room"></sa-item>
+					<sa-item type="date" name="日期" v-model="p.time"></sa-item>	
+					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+					<sa-item name="空闲时间">
+						<el-checkbox v-model="p.checkbox_1">8:00-8:45</el-checkbox>
+						<el-checkbox v-model="p.checkbox_2">8:50-9:35</el-checkbox>
+						<el-checkbox v-model="p.checkbox_3">9:50-10:35</el-checkbox>
+						<el-checkbox v-model="p.checkbox_4">10:40-11:25</el-checkbox>
+						<el-checkbox v-model="p.checkbox_5">11:30-12:15</el-checkbox>
+						<el-checkbox v-model="p.checkbox_6">13:00-13:45</el-checkbox>
+						<el-checkbox v-model="p.checkbox_7">13:50-14:35</el-checkbox>
+						<el-checkbox v-model="p.checkbox_8">14:45-15:30</el-checkbox>
+						<el-checkbox v-model="p.checkbox_9">15:40-16:25</el-checkbox>
+						<el-checkbox v-model="p.checkbox_10">16:35-17:20</el-checkbox>
+						<el-checkbox v-model="p.checkbox_11">17:25-18:10</el-checkbox>
+						<el-checkbox v-model="p.checkbox_12">18:30-19:15</el-checkbox>
+						<el-checkbox v-model="p.checkbox_13">19:20-20:05</el-checkbox>
+						<el-checkbox v-model="p.checkbox_14">20:20-20:55</el-checkbox>
+					</sa-item>
+				</el-form>
+				<!-- ------------- 快捷curd按钮 ------------- -->
+<!-- 				<sa-item type="fast-btn" show="add,delete,export,reset"></sa-item> -->
+				<sa-item type="fast-btn" show="export,reset"></sa-item>
+				<!-- ------------- 数据列表 ------------- -->
+				<el-table class="data-table" ref="data-table" :data="dataList">
+<!-- 					<el-table-column type="selection"></el-table-column> -->
+					<el-table-column label="教室编号" prop="room" width="200px"></el-table-column>
+					<el-table-column label="教室地点" prop="place" width="200px"></el-table-column>
+					<el-table-column label="空闲时间">
+						<template slot-scope="s">
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '1')">8:00-8:45</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '2')">8:50-9:35</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '3')">9:50-10:35</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '4')">10:40-11:25</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '5')">11:30-12:15</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '6')">13:00-13:45 </el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '7')">13:50-14:35</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '8')">14:45-15:30</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '9')">15:40-16:25</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '10')">16:35-17:20</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '11')">17:25-18:10</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '12')">18:30-19:15</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '13')">19:20-20:05</el-tag>
+							<el-tag size="small" effect="plain" v-if="checkFree(s.row.free, '14')">20:20-20:55</el-tag>
+						</template>
+					</el-table-column>
+<!-- 					<el-table-column label="操作" width="220px">
+						<template slot-scope="s">
+							<el-button type="text" @click="get(s.row)">查看</el-button>
+							<el-button type="text" @click="update(s.row)">修改</el-button>
+							<el-button type="text" @click="del(s.row)">删除</el-button>
+						</template>
+					</el-table-column> -->
+				</el-table>
+<!-- 				------------- 分页 -------------
+				<sa-item type="page" :curr.sync="p.pageNo" :size.sync="p.pageSize" :total="dataList.length" @change="f5()"></sa-item> -->
+			</div>
+		</div>
+<!-- 		<script src="classroom-data-list.js"></script> -->
+        <script>
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),  
+					"sa-td": httpVueLoader('../../sa-frame/com/sa-td.vue')
+				},
+				el: '.vue-box',
+				data: {
+					p: {		// 查询参数  
+						room: '',
+						time: '',
+						checkbox_1: '',
+						checkbox_2: '',
+						checkbox_3: '',
+						checkbox_4: '',
+						checkbox_5: '',
+						checkbox_6: '',
+						checkbox_7: '',
+						checkbox_8: '',
+						checkbox_9: '',
+						checkbox_10: '',
+						checkbox_11: '',
+						checkbox_12: '',
+						checkbox_13: '',
+						checkbox_14: '',
+						// pageNo: 1,
+						// pageSize: 10,
+					},
+					dataList: [],		// 数据集合
+					sid: ''
+				},
+				methods: {
+					// 刷新
+					f5: function(){
+						sa.ajax(`/student/classrooms?studentId=${this.sid}`, function(res){
+							this.dataList = res.data;	// 数据
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this), {type: 'get'});
+					},
+					// 查看
+					get: function(data) {
+						var str = '<div>';
+						str += '<p>教室编号：' + data.room + '</p>';
+						str += '<p>教室地点：' + data.place + '</p>';
+						sa.alert(str);
+					},
+					// // 添加 - 底部按钮式
+					// add: function(data) {
+					// 	sa.showIframe('添加教室', 'classroom-manage-add.html?room=-1', '400px', '220px');
+					// },
+					// 修改
+					update: function (data) {
+						sa.showIframe('修改数据', 'classroom-manage-add.html?room=' + data.room, '400px', '220px');
+					},
+					// 删除
+					// del: function (data) {
+					// 	sa.confirm('是否删除，此操作不可撤销', function() {
+					// 		sa.ajax(`/admin/classrooms?roomId=${data.room}`, function(res) {
+					// 			sa.ok('删除成功');
+					// 			sa.f5TableHeight();		// 刷新表格高度 
+					// 		}.bind(this), {type: 'delete'})
+					// 	}.bind(this));
+					// },
+					// // 批量删除
+					// deleteByIds: function() {
+					// 	// 获取选中元素的id列表
+					// 	let selection = this.$refs['data-table'].selection;
+					// 	let ids = sa.getArrayField(selection, 'room');
+					// 	if(selection.length == 0) {
+					// 		return sa.msg('请至少选择一条数据')
+					// 	}
+					// 	// 提交删除 
+					// 	sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
+					// 		sa.ajax2('/SysType/deleteByIds', {ids: ids.join(',')}, function(res) {
+					// 			sa.arrayDelete(this.dataList, selection);
+					// 			sa.ok('删除成功');
+					// 			sa.f5TableHeight();		// 刷新表格高度 
+					// 		}.bind(this))
+					// 	}.bind(this));
+					// },
+					checkFree(time, number){
+						var flag = false;
+						time.split(" ").forEach(function(item) {
+							if(item == number){
+								flag = true;
+							}
+						})
+						return flag;
+					}
+				},
+				created: function(){
+					var now = new Date();
+					var year = now.getFullYear(); //得到年份
+					var month = now.getMonth(); //得到月份
+					var date = now.getDate(); //得到日期
+					month = month + 1;
+					month = month.toString().padStart(2, "0");
+					date = date.toString().padStart(2, "0");
+					this.p.time = `${year}-${month}-${date}`;
+					this.f5();
+					sa.onInputEnter();		// 监听输入框的回车事件，执行查询  
+				}
+			})
+			
+		</script>
+	</body>
+</html>

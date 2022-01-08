@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>课表</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<!-- ------------- 参数栏 ------------- -->
+			<div class="c-title">检索参数</div>
+			<el-form>
+				<sa-item type="text" name="班级" v-model="p.cid"></sa-item>
+				<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+			</el-form>
+			<div>
+				<el-table 
+					ref="data-table" 
+					:data="dataList" 
+					border 
+					:header-cell-style="{borderColor:'#bad2f0',height:'100px','text-align':'center'}"
+					:cell-style="{borderColor:'#bad2f0','text-align':'center'}"
+				    :row-style="{height:'100px'}"
+				    style="font-size: 12px"
+				>
+					<el-table-column prop="time"></el-table-column>
+					<el-table-column label="周一" prop="Mon"></el-table-column>
+					<el-table-column label="周二" prop="Tue"></el-table-column>
+					<el-table-column label="周三" prop="Wed"></el-table-column>
+					<el-table-column label="周四" prop="Thu"></el-table-column>
+					<el-table-column label="周五" prop="Fri"></el-table-column>
+				</el-table>
+			</div>
+		</div>
+<!-- 		<script src="timetable-data.js"></script> -->
+		<script>
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue')		
+				},
+				el: '.vue-box',
+				data:{
+					p: {
+						cid: '330000198408034769'
+					},
+					dataList: [],
+					sid: ''
+				},
+				methods: {
+					// 刷新
+					f5: function(){
+						sa.ajax(`/student/timetable?studentId=${this.sid}`, function(res){
+							this.dataList = res.data;	// 数据
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this), {type: 'get'});
+					},
+				},
+				created: function(){
+					this.f5();
+					sa.onInputEnter();		// 监听输入框的回车事件，执行查询  
+
+				}
+			})
+		</script>
+	</body>
+</html>
