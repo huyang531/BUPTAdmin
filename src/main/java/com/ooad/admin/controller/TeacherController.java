@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class TeacherController {
                         "Please check database."));
     }
 
+    @Transactional
     @PutMapping(path = "{teacherId}")
     public Teacher modifyTeacher(@PathVariable String teacherId, @RequestBody Teacher teacher){
         Teacher newTeacher = teacherRepository.findById(teacherId).orElseThrow(() ->
@@ -47,7 +49,7 @@ public class TeacherController {
 //                HttpStatus.NOT_ACCEPTABLE,
 //                "User request is illegal.");
 //        }
-        newTeacher.setTeacher(teacher.getTeacher());
+//        newTeacher.setTeacher(teacher.getTeacher());
         newTeacher.setName(teacher.getName());
         return newTeacher;
     }
