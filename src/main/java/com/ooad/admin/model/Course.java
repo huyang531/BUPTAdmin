@@ -1,6 +1,10 @@
 package com.ooad.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="course")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
 
     @Id
@@ -35,64 +43,4 @@ public class Course {
     @JsonProperty("day")
     @Column(name="day")
     private String day;
-
-    public Course(String course, String name, String teacher, String credit, String department, String day) {
-        this.course = course;
-        this.name = name;
-        this.teacher = teacher;
-        this.credit = credit;
-        this.department = department;
-        this.day = day;
-    }
-
-    public Course() {
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
-    public String getCredit() {
-        return credit;
-    }
-
-    public void setCredit(String credit) {
-        this.credit = credit;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
 }

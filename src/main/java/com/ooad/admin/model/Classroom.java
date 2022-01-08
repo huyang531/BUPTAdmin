@@ -1,6 +1,10 @@
 package com.ooad.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="classroom")
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Classroom {
     @JsonProperty("room")
     @Id
@@ -22,38 +30,5 @@ public class Classroom {
     @JsonProperty("free")
     @Column(name="free")
     private String free;
-
-    public Classroom(String room, String place, String free) {
-        this.room = room;
-        this.place = place;
-        this.free = free;
-    }
-
-    public Classroom() {
-
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public String getFree() {
-        return free;
-    }
-
-    public void setFree(String free) {
-        this.free = free;
-    }
 }
+
