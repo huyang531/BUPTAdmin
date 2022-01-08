@@ -1,9 +1,7 @@
 package com.ooad.admin.controller;
 
 import com.ooad.admin.crudrepository.*;
-import com.ooad.admin.model.Classroom;
-import com.ooad.admin.model.Course;
-import com.ooad.admin.model.Student;
+import com.ooad.admin.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,10 @@ public class AdminController {
     private ClassroomRepository classroomRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
+    @Autowired
+    private TimetableItemRepository timetableItemRepository;
 
     @PostMapping("/stuadmin")
     public Student addStudent(@RequestBody Student student){
@@ -38,7 +40,7 @@ public class AdminController {
     @ResponseBody
     @PutMapping("/stuadmin")
     public Student updateStudent(@RequestParam String studentId,@RequestBody Student student){
-        if(!studentRepository.existsById(studentId)){
+        if(studentRepository.existsById(studentId)){
             studentRepository.deleteById(studentId);
         }
         return studentRepository.save(student);
@@ -84,7 +86,6 @@ public class AdminController {
 
     @PostMapping("/courses")
     public Course addCourse(@RequestBody Course course){
-
         return courseRepository.save(course);
     }
 
@@ -94,4 +95,58 @@ public class AdminController {
         Iterable<Course> all = courseRepository.findAll();
         return all;
     }
+
+
+
+
+    @PostMapping("/teachers")
+    public Teacher addTeacher(@RequestBody Teacher teacher){
+        return teacherRepository.save(teacher);
+    }
+
+    @DeleteMapping("/teachers")
+    public Teacher deleteTeacher(@RequestParam String teacherId){
+        if(teacherRepository.existsById(teacherId)){
+            teacherRepository.deleteById(teacherId);
+        }
+        return null;
+    }
+    @ResponseBody
+    @PutMapping("/teachers")
+    public Teacher updateTeacher(@RequestParam String teacherId ,@RequestBody Teacher teacher){
+        if(teacherRepository.existsById(teacherId)){
+            teacherRepository.deleteById(teacherId);
+        }
+        return teacherRepository.save(teacher);
+    }
+
+    @ResponseBody
+    @GetMapping("/teachers")
+    public Iterable<Teacher> getTeacher(@RequestParam(required = false) String teacherId){
+        List<Teacher> list = new ArrayList<>();
+        if(teacherId == null){
+            Iterable<Teacher> all = teacherRepository.findAll();
+            Iterator<Teacher> it = all.iterator();
+            while(it.hasNext()){
+                list.add(it.next());
+            }
+        }else{
+            Teacher teacher = teacherRepository.findById(teacherId).get();
+            list.add(teacher);
+        }
+        return list;
+
+    }
+    @PostMapping("/timetable")
+    public TimetableItem addTimetableItem(@RequestBody TimetableItem timetableItem){
+        timetableItem.setId("-1");//课程表只设置有唯一的一个
+        return timetableItemRepository.save(timetableItem);
+    }
+    @ResponseBody
+    @GetMapping("/timetable")
+    public TimetableItem getTimetableItem(){
+        return timetableItemRepository.findById("-1").get();
+
+    }
+
 }
