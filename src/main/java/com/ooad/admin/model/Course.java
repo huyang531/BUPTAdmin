@@ -2,10 +2,9 @@ package com.ooad.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="course")
@@ -35,6 +34,11 @@ public class Course {
     @JsonProperty("day")
     @Column(name="day")
     private String day;
+
+    @JsonProperty("studentlist")
+    @OneToMany()
+    @JoinColumn(name="studentlist")
+    private List<Student> studentlist = new ArrayList<>();
 
     public Course(String course, String name, String teacher, String credit, String department, String day) {
         this.course = course;

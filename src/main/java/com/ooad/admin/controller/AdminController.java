@@ -38,7 +38,7 @@ public class AdminController {
     @ResponseBody
     @PutMapping("/stuadmin")
     public Student updateStudent(@RequestParam String studentId,@RequestBody Student student){
-        if(studentRepository.existsById(studentId)){
+        if(!studentRepository.existsById(studentId)){
             studentRepository.deleteById(studentId);
         }
         return studentRepository.save(student);
@@ -69,26 +69,12 @@ public class AdminController {
 
     @PostMapping("/classrooms")
     public Classroom addClassRoom(@RequestBody Classroom classroom){
-        return classroomRepository.save(classroom);
-    }
-    @DeleteMapping("/classrooms")
-    public Classroom deleteClassRoom(@RequestParam String roomId){
-        if(classroomRepository.existsById(roomId)){
-            classroomRepository.deleteById(roomId);
-        }
-        return null;
-    }
-    @ResponseBody
-    @PutMapping("/classrooms")
-    public Classroom updateClassroom(@RequestParam(name = "roomId") String classroomId,@RequestBody Classroom classroom){
-        if(classroomRepository.existsById(classroomId)){
-            classroomRepository.deleteById(classroomId);
-        }
+
         return classroomRepository.save(classroom);
     }
 
     @ResponseBody
-    @GetMapping("/classrooms")
+    @RequestMapping("/classrooms")
     public Iterable<Classroom> getAllClassroom(){
         Iterable<Classroom> all = classroomRepository.findAll();
         return all;
@@ -104,35 +90,8 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping("/courses")
-    public Iterable<Course> getCourses(@RequestParam(name = "courseId", required = false) String courseId){
-        List<Course> list = new ArrayList<>();
-        if(courseId == null){
-            Iterable<Course> all = courseRepository.findAll();
-            Iterator<Course> it = all.iterator();
-            while(it.hasNext()){
-                list.add(it.next());
-            }
-        }else{
-            Course course = courseRepository.findById(courseId).get();
-            list.add(course);
-        }
-        return list;
+    public Iterable<Course> listCourses(){
+        Iterable<Course> all = courseRepository.findAll();
+        return all;
     }
-
-    @DeleteMapping("/courses")
-    public Course deleteCourses(@RequestParam String courseId){
-        if(courseRepository.existsById(courseId)){
-            courseRepository.deleteById(courseId);
-        }
-        return null;
-    }
-    @ResponseBody
-    @PutMapping("/courses")
-    public Course updateCourses(@RequestParam(name = "courseId") String courseId,@RequestBody Course course){
-        if(courseRepository.existsById(courseId)){
-            courseRepository.deleteById(courseId);
-        }
-        return courseRepository.save(course);
-    }
-
 }
