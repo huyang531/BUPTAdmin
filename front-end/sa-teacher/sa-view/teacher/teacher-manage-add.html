@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>教师管理-修改</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			/* 流体input */
+			.c-panel .el-form .el-input,.el-select{width: calc(100% - 120px);}
+			.c-panel .el-form .el-select .el-input{width: 100%;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" :class="{sbot: tid}" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<el-form v-if="m">
+						<sa-item name="工号" v-model="m.tid" br disabled></sa-item>
+						<sa-item name="姓名" v-model="m.name" br></sa-item>
+						<sa-item name="性别" v-model="m.sex" br></sa-item>
+						<sa-item name="所在省份" v-model="m.province" br></sa-item>
+						<sa-item name="身份证号" v-model="m.ID" br></sa-item>
+						<sa-item name="所在院系" v-model="m.department" br></sa-item>
+						<sa-item name="" class="s-ok" br>
+							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
+						</sa-item>
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button type="primary" @click="ok()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
+			</div>
+		</div>
+<!-- 		<script src="teacher-data-list.js"></script> -->
+		<script type="text/javascript">
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),				// logo 
+				},
+				el: '.vue-box',
+				data: {
+					tid: sa.p('tid', 0),	// 获取传递的参数 
+					m: null
+				},
+				methods: {
+					// 创建一个 默认Model 
+					createModel: function() {
+						return {
+							tid: 0, 
+							name: '', 
+							sex: '',
+							province: '',
+							ID: '',
+							department: ''
+						}
+					},
+					// 提交 
+					ok: function() {
+						// 表单验证 
+						sa.checkNull(this.m.name, '请输入名称');
+						sa.checkNull(this.m.ID, '请输入身份证号');
+						// 开始增加或修改
+						// if(this.tid <= 0) {
+						// 	// id == 0 为增加        
+						// 	sa.ajax('/admin/teachers', this.m, function(res) {
+						// 		sa.alert('增加成功', app.clean);
+						// 	}.bind(this));
+						// } else {
+							// id != 0 为修改  
+							sa.ajax(`/teacher/${tid}`, this.m, function(res){
+								sa.alert('修改成功', app.clean);
+							}.bind(this), {type: 'put'});
+						// }
+					},
+					// 添加/修改 完成后的动作
+					clean: function() {
+						if(this.tid == 0) {
+							this.m = this.createModel();	// 初始化model 
+						} else {
+							parent.app.f5();		// 刷新父页面列表
+							sa.closeCurrIframe();	// 关闭本页 
+						}
+					}
+				},
+				created: function(){
+					// 如果是添加
+					// if(this.tid <= 0){
+					// 	this.m = this.createModel();
+					// } else {
+						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
+						this.m = gedata().data;
+					// }
+				}
+			})
+			
+			// 遍历判断， 获取模拟数据  
+			function getdata() {
+				var tid = sa.p('tid', 0);	
+				var data = null;
+				sa.ajax(`/teacher/${tid}`, function(res){
+					data = res.data;	// 数据
+				}.bind(this), {type: 'get'});
+				return dData;
+			}
+		</script>
+		
+	</body>
+</html>
