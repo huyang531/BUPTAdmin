@@ -191,11 +191,11 @@
 	<!-- 分页组件 -->
 	<div class="page-box" v-else-if="type == 'page'">
 		<el-pagination background
-			layout="total, prev, pager, next, sizes, jumper" 
+			layout="total, prev, pager, next, jumper" 
 			:current-page.sync="curr" 
 			:page-size.sync="size" 
 			:total="total" 
-			:page-sizes="sizes || [1, 10, 20, 30, 40, 50, 100]" 
+			:page-sizes="sizes"
 			@current-change="changePage()" 
 			@size-change="changePage()">
 		</el-pagination>

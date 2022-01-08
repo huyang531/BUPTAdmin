@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>课程管理-修改</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			/* 流体input */
+			.c-panel .el-form .el-input,.el-select{width: calc(100% - 120px);}
+			.c-panel .el-form .el-select .el-input{width: 100%;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" :class="{sbot: course}" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<el-form v-if="m">
+						<sa-item name="课程编号" v-model="m.course" br disabled></sa-item>
+						<sa-item name="课程名称" v-model="m.name" br></sa-item>
+						<sa-item name="任课老师" v-model="m.teacher" br></sa-item>
+						<sa-item name="课程学分" v-model="m.credit" br></sa-item>
+						<sa-item name="开设院系" v-model="m.department" br></sa-item>
+						<sa-item name="上课时间">
+							<el-checkbox v-model="m.checkbox_1">周一</el-checkbox>
+							<el-checkbox v-model="m.checkbox_2">周二</el-checkbox>
+							<el-checkbox v-model="m.checkbox_3">周三</el-checkbox>
+							<el-checkbox v-model="m.checkbox_4">周四</el-checkbox>
+							<el-checkbox v-model="m.checkbox_5">周五</el-checkbox>
+						</sa-item>
+						<sa-item name="" class="s-ok" br>
+							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
+						</sa-item>
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button type="primary" @click="ok()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
+			</div>
+		</div>
+<!-- 		<script src="course-data-list.js"></script> -->
+		<script type="text/javascript">
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),				// logo 
+				},
+				el: '.vue-box',
+				data: {
+					course: sa.p('course', 0),	// 获取传递的参数 
+					m: null
+				},
+				methods: {
+					// 创建一个 默认Model 
+					createModel: function() {
+						return {
+							course: 0, 
+							name: '', 
+							teacher: '',
+							credit: '',
+							department: '',
+							day: '',
+							checkbox_1: false,
+							checkbox_2: false,
+							checkbox_3: false,
+							checkbox_4: false,
+							checkbox_5: false,
+						}
+					},
+					// 提交 
+					ok: function() {
+						// 表单验证 
+						sa.checkNull(this.m.name, '请输入名称');
+						// 开始增加或修改
+						if(this.course <= 0) {
+							// id == 0 为增加        
+							sa.ajax('/admin/courses', this.m, function(res) {
+								sa.alert('增加成功', app.clean);
+							}.bind(this));
+						} else {
+							// id != 0 为修改  
+							sa.ajax(`/admin/courses?courseId=${this.course}`, this.m, function(res){
+								sa.alert('修改成功', app.clean);
+							}.bind(this), {type: 'put'});
+						}
+					},
+					// 添加/修改 完成后的动作
+					clean: function() {
+						if(this.course == 0) {
+							this.m = this.createModel();	// 初始化model 
+						} else {
+							parent.app.f5();		// 刷新父页面列表
+							sa.closeCurrIframe();	// 关闭本页 
+						}
+					}
+				},
+				created: function(){
+					// 如果是添加
+					if(this.course <= 0){
+						this.m = this.createModel();
+					} else {
+						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
+						this.m = getdata();
+						if(m.day.indexOf('1') > -1)
+							m.checkbox_1 = true;
+						if(m.day.indexOf('2') > -1)
+							m.checkbox_2 = true;
+						if(m.day.indexOf('3') > -1)
+							m.checkbox_3 = true;
+						if(m.day.indexOf('4') > -1)
+							m.checkbox_4 = true;
+						if(m.day.indexOf('5') > -1)
+							m.checkbox_5 = true;
+					}
+				}
+			})
+			
+			// 遍历判断， 获取模拟数据  
+			function getdata() {
+				var course = sa.p('course', 0);	
+				var data = null;
+				sa.ajax(`/admin/courses?courseId=${course}`, function(res){
+					data = res.data;	// 数据
+					sa.f5TableHeight();		// 刷新表格高度 
+				}.bind(this), {type: 'get'});
+				return data;
+			}
+		</script>
+		
+	</body>
+</html>

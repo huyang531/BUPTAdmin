@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>教室管理-修改</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			/* 流体input */
+			.c-panel .el-form .el-input,.el-select{width: calc(100% - 120px);}
+			.c-panel .el-form .el-select .el-input{width: 100%;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" :class="{sbot: room}" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<el-form v-if="m">
+						<sa-item name="教室编号" v-model="m.room" br disabled></sa-item>
+						<sa-item name="教室地点" v-model="m.place" br></sa-item>
+						<sa-item name="" class="s-ok" br>
+							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
+						</sa-item>
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button type="primary" @click="ok()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
+			</div>
+		</div>
+<!-- 		<script src="classroom-data-list.js"></script> -->
+		<script type="text/javascript">
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),				// logo 
+				},
+				el: '.vue-box',
+				data: {
+					room: sa.p('room', 0),	// 获取传递的参数 
+					m: null
+				},
+				methods: {
+					// 创建一个 默认Model 
+					createModel: function() {
+						return {
+							room: 0, 
+							place: '', 
+							checkbox_1: false,
+							checkbox_2: false,
+							checkbox_3: false,
+							checkbox_4: false,
+							checkbox_5: false,
+						}
+					},
+					// 提交 
+					ok: function() {
+						// 表单验证 
+						sa.checkNull(this.m.place, '请输入地点');
+						// 开始增加或修改
+						if(this.room <= 0) {
+							// room == 0 为增加        
+							sa.ajax('/admin/classrooms', this.m, function(res) {
+								sa.alert('增加成功', app.clean);
+							}.bind(this),);
+							
+						} else {
+							// room != 0 为修改  
+							sa.ajax(`/admin/classrooms?roomId=${this.room}`, this.m, function(res){
+								sa.alert('修改成功', app.clean);
+							}.bind(this));
+						}
+					},
+					// 添加/修改 完成后的动作
+					clean: function() {
+						if(this.room == 0) {
+							this.m = this.createModel();	// 初始化model 
+						} else {
+							parent.app.f5();		// 刷新父页面列表
+							sa.closeCurrIframe();	// 关闭本页 
+						}
+					}
+				},
+				created: function(){
+					// 如果是添加
+					if(this.room <= 0){
+						this.m = this.createModel();
+					} else {
+						// room 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
+						this.m = getdata();
+					}
+				}
+			})
+			
+			// 遍历判断， 获取模拟数据  
+			function getdata() {
+				var room = sa.p('room', 0);	
+				var data = null;
+				sa.ajax(`/admin/stuadmin?roomId=${room}`, function(res) {
+					data = res.data;
+				}.bind(this), {type: 'get'});
+				return data;
+			}
+		</script>
+		
+	</body>
+</html>

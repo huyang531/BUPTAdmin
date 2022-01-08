@@ -36,29 +36,8 @@
 					<span class="el-dropdown-link user-name" style="height: 100%; padding: 0 1em; display: inline-block;">
 						<img :src="$root.user.avatar" class="user-avatar">
 						<span>{{$root.user.username}}</span>
-						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item v-for="drop in $root.dropList" :command="drop.name" :key="drop.name">{{drop.name}}</el-dropdown-item>
-					</el-dropdown-menu>
 				</el-dropdown>
-			</span>
-			<span title="主题" class="tool-fox" style="padding: 0;">
-				<el-dropdown @command="toggleTheme" trigger="click" size="medium">
-					<span class="el-dropdown-link" style="height: 100%; padding: 0 1em; display: inline-block;">
-						<i class="el-icon-price-tag" style="font-weight: bold;"></i>
-						<span style="font-size: 0.9em;">主题</span>
-					</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item :command="t.value" v-for="t in themeList" :key="t.name">
-							<span :style=" $root.themeV == t.value ? 'color: #44f' : '' ">{{t.name}} </span>
-						</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</span> 
-			<span title="便签" class="tool-fox" @click="openNote()">
-				<i class="el-icon-edit" style="font-weight: bold; font-size: 0.9em;"></i>
-				<span style="font-size: 0.9em;">便签</span>
 			</span>
 			<span title="全屏" class="tool-fox" v-if="isFullScreen == false" @click="fullScreen()">
 				<i class="el-icon-rank" style="font-weight: bold; transform: rotate(45deg)"></i>
@@ -174,19 +153,6 @@
 				this.searchList = searchList;
 			},
 			
-			// ------------------------------ 主题 ------------------------------
-			// 切换主题
-			toggleTheme: function(command) {
-				// 开始切换
-				this.$root.themeV = command + "";
-				localStorage.setItem('themeV', command);
-				for (var i = 0; i < this.themeList.length; i++) {
-					if(this.themeList[i].value + '' == command + '') {
-						this.$message('切换成功，' + this.themeList[i].name);
-					}
-				}
-			},
-			
 			// ------------------------------ 全屏 ------------------------------
 			// 进入全屏 
 			fullScreen: function() {
@@ -235,29 +201,6 @@
 						drop.click();
 					}
 				})
-			},
-			// 打开便签
-			openNote: function() {
-				var w = (document.body.clientWidth * 0.4) + 'px';
-				var h = (document.body.clientHeight * 0.6) + 'px';
-				var default_content = '一个简单的小便签, 关闭浏览器后再次打开仍然可以加载到上一次的记录, 你可以用它来记录一些临时资料';
-				var value = localStorage.getItem('sa_admin_note') || default_content;
-				var index = layer.prompt({
-					title: '一个小便签', 
-					value: value,
-					formType: 2,
-					area: [w, h],
-					btn: ['保存'],
-					maxlength: 99999999,
-					skin: 'layer-note-class' 
-				}, function(pass, index){
-					layer.close(index)					
-				});
-				var se = '#layui-layer' + index + ' .layui-layer-input';
-				var d = document.querySelector(se);
-				d.oninput = function() {
-					localStorage.setItem('sa_admin_note', this.value);
-				}
 			},
 			
 			// 刷新时间

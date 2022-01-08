@@ -16,7 +16,6 @@ var sa_admin = new Vue({
 		"nav-tab-bar": httpVueLoader('sa-frame/nav/nav-tab-bar.vue'),		// tab栏
 		"nav-view-vessel": httpVueLoader('sa-frame/nav/nav-view-vessel.vue'),	// 视图容器 
 		"com-right-menu": httpVueLoader('sa-frame/nav/com-right-menu.vue'),		// 右键菜单 
-		"com-add-tab": httpVueLoader('sa-frame/nav/com-add-tab.vue'),			// 双击添加 tab 的弹窗 
 	},
 	el: '.app',
 	data: {
