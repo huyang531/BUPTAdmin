@@ -27,9 +27,9 @@ public class Course {
     @Column(name="name")
     private String name;
 
-    @JsonProperty("teacher")
-    @Column(name="teacher")
-    private String teacher;
+    @ManyToOne
+    @JoinColumn(name = "teacher_teacher")
+    private Teacher teacher;
 
     @JsonProperty("credit")
     @Column(name="credit")
