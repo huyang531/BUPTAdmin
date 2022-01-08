@@ -2,10 +2,9 @@ package com.ooad.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="course")
@@ -36,14 +35,8 @@ public class Course {
     @Column(name="day")
     private String day;
 
-    public Course(String course, String name, String teacher, String credit, String department, String day) {
-        this.course = course;
-        this.name = name;
-        this.teacher = teacher;
-        this.credit = credit;
-        this.department = department;
-        this.day = day;
-    }
+    @OneToMany
+    private Set<Student> studentlist = new HashSet<Student>();
 
     public Course() {
     }
@@ -94,5 +87,13 @@ public class Course {
 
     public void setDay(String day) {
         this.day = day;
+    }
+
+    public Set<Student> getStudentlist() {
+        return studentlist;
+    }
+
+    public void setStudentlist(Set<Student> studentlist) {
+        this.studentlist = studentlist;
     }
 }
