@@ -91,7 +91,8 @@
 					// 刷新
 					f5: function(){
 						sa.ajax(`/student?studentId=${this.sid}`, function(res){
-							this.dataList.push(res[0]);
+							this.dataList = [];
+							this.dataList.push(res);
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
 					},
@@ -109,7 +110,7 @@
 					// },
 					// 修改
 					update: function (data) {
-						sa.showIframe('修改数据', 'student-manage-add.html?studentId=' + data.sid, '450px', '410px');
+						sa.showIframe('修改数据', 'student-manage-add.html?sid=' + data.sid, '450px', '410px');
 					},
 					// // 删除
 					// del: function (data) {

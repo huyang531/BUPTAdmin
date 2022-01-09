@@ -100,20 +100,23 @@
 					// 	this.m = this.createModel();
 					// } else {
 						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = gedata().data;
+						sa.ajax(`/teacher/${this.tid}`, function(res){
+							this.m = res;	// 数据
+						}.bind(this), {type: 'get'});
+						// this.m = gedata().data;
 					// }
 				}
 			})
 			
 			// 遍历判断， 获取模拟数据  
-			function getdata() {
-				var tid = sa.p('tid', 0);	
-				var data = null;
-				sa.ajax(`/teacher/${tid}`, function(res){
-					data = res.data;	// 数据
-				}.bind(this), {type: 'get'});
-				return dData;
-			}
+			// function getdata() {
+			// 	var tid = sa.p('tid', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/teacher/${tid}`, function(res){
+			// 		data = res.data;	// 数据
+			// 	}.bind(this), {type: 'get'});
+			// 	return dData;
+			// }
 		</script>
 		
 	</body>

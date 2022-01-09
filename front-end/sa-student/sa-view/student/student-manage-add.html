@@ -38,10 +38,10 @@
 				</div>
 			</div>
 			<!-- ------- 底部按钮 ------- -->
-<!-- 			<div class="s-foot">
+			<div class="s-foot">
 				<el-button type="primary" @click="ok()">确定</el-button>
 				<el-button @click="sa.closeCurrIframe()">取消</el-button>
-			</div> -->
+			</div>
 		</div>
 		<script type="text/javascript">
 			var app = new Vue({
@@ -70,7 +70,7 @@
 						// 表单验证 
 						sa.checkNull(this.m.name, '请输入姓名');
 						sa.checkNull(this.m.ID, '请输入身份证号');
-						sa.ajax(`/admin/stuadmin?studentId=${this.sid}`, this.m, function(res){
+						sa.ajax(`/admin/stuadmin?studentId=${this.sid}`, JSON.stringify(this.m), function(res){
 							sa.alert('修改成功', app.clean);
 						}.bind(this));
 						// // 开始增加或修改
@@ -100,20 +100,23 @@
 					// 	this.m = this.createModel();
 					// } else {
 						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = getData();
+						sa.ajax(`/student?studentId=${this.sid}`, function(res){
+							this.m = res;	// 数据
+						}.bind(this), {type: 'get'});
+						// this.m = getData();
 					// }
 				}
 			})
 			
 			// 遍历判断， 获取模拟数据  
-			function getData() {
-				var sid = sa.p('sid', 0);	
-				var data = null;
-				sa.ajax(`/student?studentId=${sid}`, function(res) {
-					data = res.data;
-				}.bind(this), {type: 'get'});
-				return data;
-			}
+			// function getData() {
+			// 	var sid = sa.p('sid', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/student?studentId=${sid}`, function(res) {
+			// 		data = res.data;
+			// 	}.bind(this), {type: 'get'});
+			// 	return data;
+			// }
 		</script>
 	</body>
 </html>

@@ -92,7 +92,7 @@
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax(`/student/course?studentId=${this.sid}`, function(res){
+						sa.ajax(`/student/courses?studentId=${this.sid}`, function(res){
 							this.dataList = res;	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});

@@ -93,6 +93,7 @@
 					// 刷新
 					f5: function(){
 						sa.ajax(`/teacher/${this.tid}`, function(res){
+							this.dataList = [];
 							this.dataList.push(res);	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
