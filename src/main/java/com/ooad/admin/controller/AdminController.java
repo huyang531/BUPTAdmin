@@ -86,6 +86,10 @@ public class AdminController {
 
     @PostMapping("/courses")
     public Course addCourse(@RequestBody Course course){
+        teacherRepository.save(course.getTeacher());//直接上班
+        for(Student student : course.getStudentlist()){//直接
+            studentRepository.save(student);
+        }
         return courseRepository.save(course);
     }
 
