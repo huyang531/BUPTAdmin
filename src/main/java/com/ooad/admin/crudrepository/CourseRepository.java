@@ -9,10 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface CourseRepository extends CrudRepository<Course, String> {
-    @Query("select c from Course c where c.teacher.teacher = ?1")
+    @Query("select c from Course c where c.teacher.tid = ?1")
     List<Course> findByTeacherId(String teacherId);
 
-    @Query("select c.studentlist from Course c where c.teacher.teacher = ?1")
+    @Query("select c.studentlist from Course c where c.teacher.tid = ?1")
     List<List<Student>> findStudentsByTeacherId(String teacherId);
 
 }

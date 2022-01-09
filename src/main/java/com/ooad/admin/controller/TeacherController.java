@@ -63,6 +63,8 @@ public class TeacherController {
 
     @GetMapping("/courses/{teacherId}")
     public Iterable<Course> getCourses(@PathVariable("teacherId") String teacherId){
+        Course course = new Course();
+
         return courseRepository.findByTeacherId(teacherId);
     }
 
@@ -73,7 +75,7 @@ public class TeacherController {
 
     @Deprecated
     private boolean checkLegitimacy(Teacher teacher){
-        return teacher.getTeacher() != null && teacher.getName() != null;
+        return teacher.getTid() != null && teacher.getName() != null;
     }
 
     @Autowired
