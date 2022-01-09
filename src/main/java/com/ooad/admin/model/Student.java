@@ -40,6 +40,6 @@ public class Student {
     @Column(name="department")
     private String department;
 
-    @ManyToMany(mappedBy = "studentlist")
+    @ManyToMany(mappedBy = "studentlist", fetch = FetchType.EAGER)
     private Set<Course> courses = new HashSet<>();
 }
