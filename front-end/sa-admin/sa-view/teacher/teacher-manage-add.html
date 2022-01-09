@@ -79,7 +79,7 @@
 							}.bind(this));
 						} else {
 							// id != 0 为修改  
-							sa.ajax(`/admin/courses?teacherId=${this.tid}`, JSON.stringify(this.m), function(res){
+							sa.ajax(`/admin/teachers?teacherId=${this.tid}`, JSON.stringify(this.m), function(res){
 								sa.alert('修改成功', app.clean);
 							}.bind(this), {type: 'put'});
 						}
@@ -100,20 +100,23 @@
 						this.m = this.createModel();
 					} else {
 						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = getdata();
+						sa.ajax(`/admin/teachers?teacherId=${this.tid}`, function(res){
+							this.m = res[0];	// 数据
+						}.bind(this), {type: 'get'});
+						// this.m = getdata();
 					}
 				}
 			})
 			
-			// 遍历判断， 获取模拟数据  
-			function getdata() {
-				var tid = sa.p('tid', 0);	
-				var data = null;
-				sa.ajax(`/admin/teachers?teacherId=${tid}`, function(res){
-					data = res[0];	// 数据
-				}.bind(this), {type: 'get'});
-				return data;
-			}
+			// // 遍历判断， 获取模拟数据  
+			// function getdata() {
+			// 	var tid = sa.p('tid', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/admin/teachers?teacherId=${tid}`, function(res){
+			// 		data = res[0];	// 数据
+			// 	}.bind(this), {type: 'get'});
+			// 	return data;
+			// }
 		</script>
 		
 	</body>

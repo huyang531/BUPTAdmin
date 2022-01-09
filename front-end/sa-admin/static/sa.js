@@ -81,10 +81,10 @@ var sa = {
 				});
 			},
 			errorfn: function(xhr, type, errorThrown){		// ajax发生异常时的默认处理函数
-				if(xhr.status == 0){
-					return layer.alert('无法连接到服务器，请检查网络');
-				}
-				return layer.alert("异常：" + JSON.stringify(xhr));
+				// if(xhr.status == 0){
+				// 	return layer.alert('无法连接到服务器，请检查网络');
+				// }
+				// return layer.alert("异常：" + JSON.stringify(xhr));
 			},
 			complete: function(xhr, ts) {	// 成功失败都会执行 
 				

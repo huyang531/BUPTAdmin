@@ -119,8 +119,9 @@
 					// 删除
 					del: function (data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
-							sa.ajax(`/admin/courses?teacherId=${data.tid}`, function(res) {
+							sa.ajax(`/admin/teachers?teacherId=${data.tid}`, function(res) {
 								sa.ok('删除成功');
+								this.f5();
 							}.bind(this), {type: 'delete'})
 						}.bind(this));
 					},
