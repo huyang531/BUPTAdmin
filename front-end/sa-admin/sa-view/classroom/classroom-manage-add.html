@@ -25,7 +25,7 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<el-form v-if="m">
-						<sa-item name="教室编号" v-model="m.room" br disabled></sa-item>
+						<sa-item name="教室编号" v-model="m.room" br></sa-item>
 						<sa-item name="教室地点" v-model="m.place" br></sa-item>
 						<sa-item name="" class="s-ok" br>
 							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
@@ -56,11 +56,11 @@
 						return {
 							room: 0, 
 							place: '', 
-							checkbox_1: false,
-							checkbox_2: false,
-							checkbox_3: false,
-							checkbox_4: false,
-							checkbox_5: false,
+							// checkbox_1: false,
+							// checkbox_2: false,
+							// checkbox_3: false,
+							// checkbox_4: false,
+							// checkbox_5: false,
 						}
 					},
 					// 提交 
@@ -70,13 +70,13 @@
 						// 开始增加或修改
 						if(this.room <= 0) {
 							// room == 0 为增加        
-							sa.ajax('/admin/classrooms', this.m, function(res) {
+							sa.ajax('/admin/classrooms', JSON.stringify(this.m), function(res) {
 								sa.alert('增加成功', app.clean);
 							}.bind(this),);
 							
 						} else {
 							// room != 0 为修改  
-							sa.ajax(`/admin/classrooms?roomId=${this.room}`, this.m, function(res){
+							sa.ajax(`/admin/classrooms?roomId=${this.room}`, JSON.stringify(this.m), function(res){
 								sa.alert('修改成功', app.clean);
 							}.bind(this));
 						}
@@ -97,20 +97,23 @@
 						this.m = this.createModel();
 					} else {
 						// room 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = getdata();
+						sa.ajax(`/admin/classrooms?roomId=${this.room}`, function(res){
+							this.m = res[0];	// 数据
+						}.bind(this), {type: 'get'});
+						// this.m = getdata();
 					}
 				}
 			})
 			
-			// 遍历判断， 获取模拟数据  
-			function getdata() {
-				var room = sa.p('room', 0);	
-				var data = null;
-				sa.ajax(`/admin/stuadmin?roomId=${room}`, function(res) {
-					data = res.data;
-				}.bind(this), {type: 'get'});
-				return data;
-			}
+			// // 遍历判断， 获取模拟数据  
+			// function getdata() {
+			// 	var room = sa.p('room', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/admin/stuadmin?roomId=${room}`, function(res) {
+			// 		data = res.data;
+			// 	}.bind(this), {type: 'get'});
+			// 	return data;
+			// }
 		</script>
 		
 	</body>

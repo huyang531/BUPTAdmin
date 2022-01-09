@@ -90,7 +90,7 @@
 					// 刷新
 					f5: function(){
 						sa.ajax('/admin/stuadmin', function(res){
-							this.total = res.data.length;
+							this.total = res.length;
 							this.dataList = [];
 							for(let i = (this.pageNo - 1) * this.pageSize; i < this.pageNo * this.pageSize && i < this.total; i++){
 								let obj = {
@@ -101,12 +101,12 @@
 										ID: "",
 										department: ""
 								};
-								obj.sid = res.data[i].sid;
-								obj.name = res.data[i].name;
-								obj.sex = res.data[i].sex;
-								obj.province = res.data[i].province;
-								obj.ID = res.data[i].ID;
-								obj.department = res.data[i].department;
+								obj.sid = res[i].sid;
+								obj.name = res[i].name;
+								obj.sex = res[i].sex;
+								obj.province = res[i].province;
+								obj.ID = res[i].ID;
+								obj.department = res[i].department;
 								this.dataList.push(obj);
 							}
 							sa.f5TableHeight();		// 刷新表格高度 
@@ -126,13 +126,14 @@
 					},
 					// 修改
 					update: function (data) {
-						sa.showIframe('修改数据', 'student-manage-add.html?studentId=' + data.sid, '450px', '410px');
+						sa.showIframe('修改数据', 'student-manage-add.html?sid=' + data.sid, '450px', '410px');
 					},
 					// 删除
 					del: function (data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
 							sa.ajax(`/admin/stuadmin?studentId=${data.sid}`, function(res) {
 								sa.ok('删除成功');
+								this.f5();
 							}.bind(this), {type: 'delete'});
 						}.bind(this));
 					},
