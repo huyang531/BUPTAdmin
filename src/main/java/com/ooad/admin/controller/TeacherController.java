@@ -25,6 +25,7 @@ public class TeacherController {
 
     private TeacherRepository teacherRepository;
 
+    @ResponseBody
     @GetMapping("{teacherId}")
     public Teacher getTeacherInfo(@PathVariable("teacherId") String teacherId){
         return teacherRepository.findById(teacherId).orElseThrow(() ->
@@ -35,6 +36,7 @@ public class TeacherController {
                         "Please check database."));
     }
 
+    @ResponseBody
     @Transactional
     @PutMapping(path = "{teacherId}")
     public Teacher modifyTeacher(@PathVariable String teacherId, @RequestBody Teacher teacher){
@@ -54,6 +56,7 @@ public class TeacherController {
         return newTeacher;
     }
 
+    @ResponseBody
     @GetMapping("/students/{teacherId}")
     public Iterable<Student> getStudents(@PathVariable("teacherId") String teacherId){
         return courseRepository.findStudentsByTeacherId(teacherId)
@@ -61,6 +64,7 @@ public class TeacherController {
                 .collect(Collectors.toList());
     }
 
+    @ResponseBody
     @GetMapping("/courses/{teacherId}")
     public Iterable<Course> getCourses(@PathVariable("teacherId") String teacherId){
         Course course = new Course();
@@ -68,6 +72,7 @@ public class TeacherController {
         return courseRepository.findByTeacherId(teacherId);
     }
 
+    @ResponseBody
     @GetMapping("/timetable/{teacherId}")
     public Iterable<TimetableItem> getTimetable(@PathVariable("teacherId") String teacherId){
         return timetableItemRepository.findByTeacherId(teacherId);
