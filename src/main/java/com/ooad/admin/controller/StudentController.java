@@ -8,6 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -35,8 +39,18 @@ public class StudentController {
 
     @ResponseBody
     @GetMapping("/teachers")
-    public Iterable<Teacher> listTeachers(@RequestParam(value = "studentId") String studentId){
-        return teacherRepository.findAll();
+    public Iterable<Teacher> listTeachers(@RequestParam(name = "studentId") String studentId){
+        if (studentId == null){
+            return teacherRepository.findAll();
+        }
+        else{
+            List<Teacher> teachers = new ArrayList<>();
+            Set<Course> courses =  studentRepository.findById(studentId).get().getCourses();
+            for(Course course : courses){
+                teachers.add(course.getTeacher());
+            }
+            return teachers;
+        }
     }
 
     @ResponseBody
@@ -45,10 +59,10 @@ public class StudentController {
         return courseRepository.findAll();
     }
 
-    @GetMapping("/timetable")
-    public TimetableItem findTimetable(@RequestParam(value = "studentId") String studentId){
-        return timetableItemRepository.findById("-1").get();
-    }
+//    @GetMapping("/timetable")
+//    public TimetableItem findTimetable(@RequestParam(value = "studentId") String studentId){
+//        return timetableItemRepository.findById("-1").get();
+//    }
 
     @GetMapping
     public Student getStudentInfo(@RequestParam(value = "studentId") String studentId){
