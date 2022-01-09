@@ -1,5 +1,6 @@
 package com.ooad.admin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"studentlist"})
 public class Course {
 
     @Id
@@ -53,5 +55,4 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "course_course")
     )
     private Set<Student> studentlist = new HashSet<>();
-
 }

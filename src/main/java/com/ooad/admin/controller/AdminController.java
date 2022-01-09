@@ -131,19 +131,14 @@ public class AdminController {
     @ResponseBody
     @GetMapping("/teachers")
     public Iterable<Teacher> getTeacher(@RequestParam(required = false) String teacherId){
-        List<Teacher> list = new ArrayList<>();
         if(teacherId == null){
-            Iterable<Teacher> all = teacherRepository.findAll();
-            Iterator<Teacher> it = all.iterator();
-            while(it.hasNext()){
-                list.add(it.next());
-            }
+            return teacherRepository.findAll();
         }else{
+            List<Teacher> list = new ArrayList<>();
             Teacher teacher = teacherRepository.findById(teacherId).get();
             list.add(teacher);
+            return list;
         }
-        return list;
-
     }
     @PostMapping("/timetable")
     public TimetableItem addTimetableItem(@RequestBody TimetableItem timetableItem){
@@ -153,7 +148,7 @@ public class AdminController {
     @ResponseBody
     @GetMapping("/timetable")
     public TimetableItem getTimetableItem(){
-        return timetableItemRepository.findById("-1").get();
+        return timetableItemRepository.findAll().iterator().next();
 
     }
 
