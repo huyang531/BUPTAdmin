@@ -110,8 +110,11 @@ var sa = {
 			data: data,
 			dataType: 'json',
 			xhrFields: {
-			 	withCredentials: true // 携带跨域cookie
+			 	withCredentials: false // 携带跨域cookie
 			},
+			// headers: {
+			// 	'Access-Control-Allow-Origin': '*',
+			// },
 			crossDomain: true,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
