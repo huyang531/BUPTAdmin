@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="course")
@@ -44,8 +46,12 @@ public class Course {
     private String day;
 
     @JsonProperty("studentlist")
-    @OneToMany()
-    @JoinColumn(name="studentlist")
-    private List<Student> studentlist = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_takes_course",
+            joinColumns = @JoinColumn(name = "student_sid"),
+            inverseJoinColumns = @JoinColumn(name = "course_course")
+    )
+    private Set<Student> studentlist = new HashSet<>();
 
 }

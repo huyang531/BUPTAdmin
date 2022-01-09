@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="student")
@@ -35,4 +39,7 @@ public class Student {
 
     @Column(name="department")
     private String department;
+
+    @ManyToMany(mappedBy = "studentlist")
+    private Set<Course> courses = new HashSet<>();
 }
