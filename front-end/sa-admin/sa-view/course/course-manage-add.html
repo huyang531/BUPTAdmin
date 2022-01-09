@@ -31,11 +31,11 @@
 						<sa-item name="课程学分" v-model="m.credit" br></sa-item>
 						<sa-item name="开设院系" v-model="m.department" br></sa-item>
 						<sa-item name="上课时间">
-							<el-checkbox v-model="m.checkbox_1">周一</el-checkbox>
-							<el-checkbox v-model="m.checkbox_2">周二</el-checkbox>
-							<el-checkbox v-model="m.checkbox_3">周三</el-checkbox>
-							<el-checkbox v-model="m.checkbox_4">周四</el-checkbox>
-							<el-checkbox v-model="m.checkbox_5">周五</el-checkbox>
+							<el-checkbox v-model="p.checkbox_1">周一</el-checkbox>
+							<el-checkbox v-model="p.checkbox_2">周二</el-checkbox>
+							<el-checkbox v-model="p.checkbox_3">周三</el-checkbox>
+							<el-checkbox v-model="p.checkbox_4">周四</el-checkbox>
+							<el-checkbox v-model="p.checkbox_5">周五</el-checkbox>
 						</sa-item>
 						<sa-item name="" class="s-ok" br>
 							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
@@ -58,7 +58,14 @@
 				el: '.vue-box',
 				data: {
 					course: sa.p('course', 0),	// 获取传递的参数 
-					m: null
+					m: null,
+					p: {
+							checkbox_1: false,
+							checkbox_2: false,
+							checkbox_3: false,
+							checkbox_4: false,
+							checkbox_5: false,						
+					}
 				},
 				methods: {
 					// 创建一个 默认Model 
@@ -66,15 +73,11 @@
 						return {
 							course: '', 
 							name: '', 
-							teacher: '',
+							teacher_teacher: '',
 							credit: '',
 							department: '',
 							day: '',
-							checkbox_1: false,
-							checkbox_2: false,
-							checkbox_3: false,
-							checkbox_4: false,
-							checkbox_5: false,
+
 						}
 					},
 					// 提交 
@@ -84,12 +87,12 @@
 						// 开始增加或修改
 						if(this.course <= 0) {
 							// id == 0 为增加        
-							sa.ajax('/admin/courses', this.m, function(res) {
+							sa.ajax('/admin/courses', JSON.stringify(this.m), function(res) {
 								sa.alert('增加成功', app.clean);
 							}.bind(this));
 						} else {
 							// id != 0 为修改  
-							sa.ajax(`/admin/courses?courseId=${this.course}`, this.m, function(res){
+							sa.ajax(`/admin/courses?courseId=${this.course}`, JSON.stringify(this.m), function(res){
 								sa.alert('修改成功', app.clean);
 							}.bind(this), {type: 'put'});
 						}
@@ -110,31 +113,36 @@
 						this.m = this.createModel();
 					} else {
 						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = getdata();
-						if(m.day.indexOf('1') > -1)
-							m.checkbox_1 = true;
-						if(m.day.indexOf('2') > -1)
-							m.checkbox_2 = true;
-						if(m.day.indexOf('3') > -1)
-							m.checkbox_3 = true;
-						if(m.day.indexOf('4') > -1)
-							m.checkbox_4 = true;
-						if(m.day.indexOf('5') > -1)
-							m.checkbox_5 = true;
+						sa.ajax(`/admin/courses?courseId=${this.course}`, function(res){
+							this.m = res[0];	// 数据
+							if(this.m.day.indexOf('1') > -1)
+								this.p.checkbox_1 = true;
+							if(this.m.day.indexOf('2') > -1)
+								this.p.checkbox_2 = true;
+							if(this.m.day.indexOf('3') > -1)
+								this.p.checkbox_3 = true;
+							if(this.m.day.indexOf('4') > -1)
+								this.p.checkbox_4 = true;
+							if(this.m.day.indexOf('5') > -1)
+								this.p.checkbox_5 = true;
+						}.bind(this), {type: 'get'});
+						console.log(this.m)
+						// this.m = getdata();
+
 					}
 				}
 			})
 			
 			// 遍历判断， 获取模拟数据  
-			function getdata() {
-				var course = sa.p('course', 0);	
-				var data = null;
-				sa.ajax(`/admin/courses?courseId=${course}`, function(res){
-					data = res.data;	// 数据
-					sa.f5TableHeight();		// 刷新表格高度 
-				}.bind(this), {type: 'get'});
-				return data;
-			}
+			// function getdata() {
+			// 	var course = sa.p('course', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/admin/courses?courseId=${course}`, function(res){
+			// 		data = res.data;	// 数据
+			// 		sa.f5TableHeight();		// 刷新表格高度 
+			// 	}.bind(this), {type: 'get'});
+			// 	return data;
+			// }
 		</script>
 		
 	</body>

@@ -21,7 +21,7 @@
 				<div class="c-title">检索参数</div>
 				<el-form @submit.native.prevent>
 					<sa-item name="教室编号" v-model="p.room"></sa-item>
-					<sa-item type="date" name="日期" v-model="p.time"></sa-item>	
+					<sa-item type="date" name="日期" v-model="p.free"></sa-item>	
 					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
 					<sa-item name="空闲时间">
 						<el-checkbox v-model="p.checkbox_1">8:00-8:45</el-checkbox>
@@ -89,7 +89,7 @@
 				data: {
 					p: {		// 查询参数  
 						room: '',
-						time: '',
+						free: '',
 						checkbox_1: '',
 						checkbox_2: '',
 						checkbox_3: '',
@@ -112,8 +112,8 @@
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax('/admin/classrooms', this.p, function(res){
-							this.dataList = res.data;	// 数据
+						sa.ajax('/admin/classrooms', function(res){
+							this.dataList = res;	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
 					},
@@ -136,6 +136,7 @@
 					del: function (data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
 							sa.ajax(`/admin/classrooms?roomId=${data.room}`, function(res) {
+								console.log("aa")
 								sa.ok('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
 							}.bind(this), {type: 'delete'})
@@ -159,6 +160,8 @@
 					// 	}.bind(this));
 					// },
 					checkFree(time, number){
+						if(time == null)
+							return false;
 						var flag = false;
 						time.split(" ").forEach(function(item) {
 							if(item == number){
