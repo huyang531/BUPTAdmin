@@ -108,13 +108,13 @@
 						// pageSize: 10,
 					},
 					dataList: [],		// 数据集合
-					sid: ''
+					sid: '2019212008'
 				},
 				methods: {
 					// 刷新
 					f5: function(){
 						sa.ajax(`/student/classrooms?studentId=${this.sid}`, function(res){
-							this.dataList = res.data;	// 数据
+							this.dataList = res;	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
 					},
@@ -160,6 +160,8 @@
 					// 	}.bind(this));
 					// },
 					checkFree(time, number){
+						if(time == null)
+							return false;
 						var flag = false;
 						time.split(" ").forEach(function(item) {
 							if(item == number){

@@ -41,7 +41,7 @@
 				</el-table>
 			</div>
 		</div>
-<!-- 		<script src="timetable-data.js"></script> -->
+		<script src="timetable-data.js"></script>
 		<script>
 			var app = new Vue({
 				components: {
@@ -57,10 +57,10 @@
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax(`/teacher/timetable/${tid}`, function(res){
+						sa.ajax2(`/teacher/timetable/${this.p.cid}`, function(res){
 							this.dataList = res.data;	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this), {type: 'get'});
+						}.bind(this), {type: 'get', res: mockDataList});
 					},
 				},
 				created: function(){

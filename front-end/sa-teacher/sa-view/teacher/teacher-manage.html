@@ -87,13 +87,13 @@
 						{id: 7, name: '现代邮政学院'}
 					],
 					dataList: [],	// 数据集合
-					tid: ''
+					tid: '2314234'
 				},
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax(`/teacher/${tid}`, function(res){
-							this.dataList = res.data;	// 数据
+						sa.ajax(`/teacher/${this.tid}`, function(res){
+							this.dataList.push(res);	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
 					},
@@ -112,7 +112,7 @@
 					// // 添加 - 底部按钮式
 					// add: function(data) {
 					// 	sa.showIframe('添加教师', 'teacher-manage-add.html?tid=-1', '450px', '410px');
-					},
+					// },
 					// 修改
 					update: function (data) {
 						sa.showIframe('修改数据', 'teacher-manage-add.html?tid=' + data.tid, '450px', '410px');
