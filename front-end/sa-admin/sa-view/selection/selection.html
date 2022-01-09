@@ -41,7 +41,18 @@
 					<sa-td name="可选人数" prop="num"></sa-td>
 					<sa-td name="已选人数" prop="num_selected"></sa-td>
 					<sa-td type="j" name="状态" prop="status" :jv="{1: '已选上[green]', 2: '未选[red]'}"></sa-td>
-					<sa-td type="switch" prop="status" :jv="{1: '已选上', 2: '未选'}"></sa-td>
+					<el-table-column>
+						<template slot-scope="s">
+							<el-switch v-model="s.row.status"
+							     :active-value="1"
+							     :inactive-value="2"
+								 active-color="#409EFF"
+								 inactive-color="#999"
+							     @change=f(s.row,s.row.status)>
+							</el-switch>
+							<!-- <el-switch type="switch" prop="status" :jv="{1: '已选上', 2: '未选'}" @change=f(s)></sa-td> -->
+						</template>
+					</el-table-column>	
 				</el-table>
 				<!-- ------------- 分页 ------------- -->
 				<sa-item type="page" :curr.sync="p.pageNo" :size.sync="p.pageSize" :total="dataList.length" @change="f5()"></sa-item>
@@ -64,6 +75,10 @@
 					dataList: [],		// 数据集合
 				},
 				methods: {
+					f: function(data, status){
+						console.log(data);
+						console.log(status);
+					},
 					// 刷新
 					f5: function(){
 						sa.ajax2('/goods/getList', this.p, function(res){

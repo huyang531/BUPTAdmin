@@ -89,7 +89,7 @@
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax('/admin/stuadmin', this.p, function(res){
+						sa.ajax('/admin/stuadmin', function(res){
 							this.total = res.data.length;
 							this.dataList = [];
 							for(let i = (this.pageNo - 1) * this.pageSize; i < this.pageNo * this.pageSize && i < this.total; i++){

@@ -112,6 +112,7 @@ var sa = {
 			xhrFields: {
 			 	withCredentials: false // 携带跨域cookie
 			},
+			contentType: 'application/json',
 			// headers: {
 			// 	'Access-Control-Allow-Origin': '*',
 			// },
@@ -123,11 +124,12 @@ var sa = {
 				console.log('返回数据：', res);
 				setTimeout(function() {
 					sa.hideLoading();
+					return cfg['success200'](res);
 					// 如果相应的处理函数存在
-					if(cfg['success' + res.code] != undefined) {
-						return cfg['success' + res.code](res);
-					}
-					layer.alert('未知状态码：' + JSON.stringify(res));
+					// if(cfg['success' + res.code] != undefined) {
+					// 	return cfg['success' + res.code](res);
+					// }
+					// layer.alert('未知状态码：' + JSON.stringify(res));
 				}, cfg.sleep);
 			},
 			error: function(xhr, type, errorThrown){
