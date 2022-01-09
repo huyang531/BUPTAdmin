@@ -25,7 +25,7 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<el-form v-if="m">
-						<sa-item name="工号" v-model="m.tid" br disabled></sa-item>
+						<sa-item name="工号" v-model="m.tid" br></sa-item>
 						<sa-item name="姓名" v-model="m.name" br></sa-item>
 						<sa-item name="性别" v-model="m.sex" br></sa-item>
 						<sa-item name="所在省份" v-model="m.province" br></sa-item>
@@ -58,7 +58,7 @@
 					// 创建一个 默认Model 
 					createModel: function() {
 						return {
-							tid: 0, 
+							tid: '', 
 							name: '', 
 							sex: '',
 							province: '',
@@ -74,12 +74,12 @@
 						// 开始增加或修改
 						if(this.tid <= 0) {
 							// id == 0 为增加        
-							sa.ajax('/admin/teachers', this.m, function(res) {
+							sa.ajax('/admin/teachers', JSON.stringify(this.m), function(res) {
 								sa.alert('增加成功', app.clean);
 							}.bind(this));
 						} else {
 							// id != 0 为修改  
-							sa.ajax(`/admin/courses?teacherId=${this.tid}`, this.m, function(res){
+							sa.ajax(`/admin/teachers?teacherId=${this.tid}`, JSON.stringify(this.m), function(res){
 								sa.alert('修改成功', app.clean);
 							}.bind(this), {type: 'put'});
 						}
@@ -100,20 +100,23 @@
 						this.m = this.createModel();
 					} else {
 						// id 非 0 代表 是要修改 先查询一下，把旧值显示在input中  
-						this.m = gedata().data;
+						sa.ajax(`/admin/teachers?teacherId=${this.tid}`, function(res){
+							this.m = res[0];	// 数据
+						}.bind(this), {type: 'get'});
+						// this.m = getdata();
 					}
 				}
 			})
 			
-			// 遍历判断， 获取模拟数据  
-			function getdata() {
-				var tid = sa.p('tid', 0);	
-				var data = null;
-				sa.ajax(`/admin/teachers?teacherId=${tid}`, function(res){
-					data = res.data;	// 数据
-				}.bind(this), {type: 'get'});
-				return dData;
-			}
+			// // 遍历判断， 获取模拟数据  
+			// function getdata() {
+			// 	var tid = sa.p('tid', 0);	
+			// 	var data = null;
+			// 	sa.ajax(`/admin/teachers?teacherId=${tid}`, function(res){
+			// 		data = res[0];	// 数据
+			// 	}.bind(this), {type: 'get'});
+			// 	return data;
+			// }
 		</script>
 		
 	</body>

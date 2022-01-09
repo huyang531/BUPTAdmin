@@ -25,7 +25,7 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<el-form v-if="m">
-						<sa-item name="学号" v-model="m.sid" br disabled></sa-item>
+						<sa-item name="学号" v-model="m.sid" br></sa-item>
 						<sa-item name="姓名" v-model="m.name" br></sa-item>
 						<sa-item name="性别" v-model="m.sex" br></sa-item>
 						<sa-item name="所在省份" v-model="m.province" br></sa-item>
@@ -57,7 +57,7 @@
 					// 创建一个 默认Model 
 					createModel: function() {
 						return {
-							sid: 0, 
+							sid: '', 
 							name: '', 
 							sex: '',
 							province: '',

@@ -25,7 +25,7 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<el-form v-if="m">
-						<sa-item name="课程编号" v-model="m.course" br disabled></sa-item>
+						<sa-item name="课程编号" v-model="m.course" br></sa-item>
 						<sa-item name="课程名称" v-model="m.name" br></sa-item>
 						<sa-item name="任课老师" v-model="m.teacher" br></sa-item>
 						<sa-item name="课程学分" v-model="m.credit" br></sa-item>
@@ -64,7 +64,7 @@
 					// 创建一个 默认Model 
 					createModel: function() {
 						return {
-							course: 0, 
+							course: '', 
 							name: '', 
 							teacher: '',
 							credit: '',
