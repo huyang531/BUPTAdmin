@@ -1,4 +1,4 @@
-sa_admin.title = "教务管理系统";
+sa_admin.title = "教师教务管理系统";
 sa_admin.logo = 'sa-frame/logo.png';
 sa_admin.icon = 'sa-frame/logo.png';
 

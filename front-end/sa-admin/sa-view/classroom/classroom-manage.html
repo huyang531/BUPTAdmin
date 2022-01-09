@@ -136,7 +136,6 @@
 					del: function (data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
 							sa.ajax(`/admin/classrooms?roomId=${data.room}`, function(res) {
-								console.log("aa")
 								sa.ok('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
 							}.bind(this), {type: 'delete'})
