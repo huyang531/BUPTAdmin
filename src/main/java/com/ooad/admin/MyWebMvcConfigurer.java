@@ -13,7 +13,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
         //设置允许跨域的路径
         registry.addMapping("/**")
                 //设置允许跨域请求的域名
-//                .allowedOrigins("*")
+                .allowedOrigins("*")
                 .allowedHeaders("*")
 //                .allowCredentials(true)//是否允许证书 不再默认开启
                 //设置允许的方法
