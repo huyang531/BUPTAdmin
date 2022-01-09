@@ -81,7 +81,21 @@ public class AdminController {
         Iterable<Classroom> all = classroomRepository.findAll();
         return all;
     }
-
+    @DeleteMapping("/classrooms")
+    public Classroom deleteClassroom(@RequestParam(name = "roomId") String roomId){
+        if(classroomRepository.existsById(roomId)){
+            classroomRepository.deleteById(roomId);
+        }
+        return null;
+    }
+    @ResponseBody
+    @PutMapping("/classrooms")
+    public Classroom updateClassroom(@RequestParam(name = "roomId") String room,@RequestBody Classroom classroom){
+        if(classroomRepository.existsById(room)){
+            classroomRepository.deleteById(room);
+        }
+        return classroomRepository.save(classroom);
+    }
 
 
     @PostMapping("/courses")
@@ -97,13 +111,29 @@ public class AdminController {
         return courseRepository.save(course);
     }
 
+
+
     @ResponseBody
     @GetMapping("/courses")
     public Iterable<Course> listCourses(){
         Iterable<Course> all = courseRepository.findAll();
         return all;
     }
-
+    @DeleteMapping("/course")
+    public Course deleteCourse(@RequestParam(name = "courseId") String courseId){
+        if(courseRepository.existsById(courseId)){
+            courseRepository.deleteById(courseId);
+        }
+        return null;
+    }
+    @ResponseBody
+    @PutMapping("/course")
+    public Course updateCourse(@RequestParam(name = "courseId") String courseId,@RequestBody Course course){
+        if(courseRepository.existsById(courseId)){
+            courseRepository.deleteById(courseId);
+        }
+        return courseRepository.save(course);
+    }
 
 
 

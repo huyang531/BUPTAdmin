@@ -87,13 +87,13 @@
 						{id: 7, name: '现代邮政学院'}
 					],
 					dataList: [],		// 数据集合
-					tid: ''
+					tid: '2314234'
 				},
 				methods: {
 					// 刷新
 					f5: function(){
-						sa.ajax(`/teacher/courses/${tid}`, function(res){
-							this.dataList = res.data;	// 数据
+						sa.ajax(`/teacher/courses/${this.tid}`, function(res){
+							this.dataList = res;	// 数据
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {type: 'get'});
 					},
