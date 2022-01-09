@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-@Controller
+@RestController
 @RequestMapping("/student")
 public class StudentController {
 
@@ -24,24 +24,28 @@ public class StudentController {
     @Autowired
     private TimetableItemRepository timetableItemRepository;
 
+    @Autowired
     private StudentRepository studentRepository;
 
-    @RequestMapping("/classrooms")
+    @ResponseBody
+    @GetMapping("/classrooms")
     public Iterable<Classroom> listClassrooms(@RequestParam(value = "studentId") String studentId){
         return classroomRepository.findAll();
     }
 
-    @RequestMapping("/teachers")
+    @ResponseBody
+    @GetMapping("/teachers")
     public Iterable<Teacher> listTeachers(@RequestParam(value = "studentId") String studentId){
         return teacherRepository.findAll();
     }
 
-    @RequestMapping("/course")
+    @ResponseBody
+    @GetMapping("/courses")
     public Iterable<Course> listCourses(@RequestParam(value = "studentId") String studentId){
         return courseRepository.findAll();
     }
 
-    @RequestMapping("/timetable")
+    @GetMapping("/timetable")
     public TimetableItem findTimetable(@RequestParam(value = "studentId") String studentId){
         return timetableItemRepository.findById("-1").get();
     }
