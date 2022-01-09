@@ -20,7 +20,7 @@ public class BuptAdminConfig {
             TimetableItemRepository timetableItemRepository) {
         return args -> {
             // 新建 Classroom
-            Classroom classroom = new Classroom("335", "教三", "完全空闲");
+            Classroom classroom = new Classroom("335", "教三", "6");
             classroomRepository.save(classroom);
 
             // 新建 Teacher

@@ -104,9 +104,8 @@ public class AdminController {
             teacherRepository.save(course.getTeacher());//直接上班
         }
         if(course.getStudentlist() != null){
-            for(Student student : course.getStudentlist()){//直接
-                studentRepository.save(student);
-            }
+            //直接
+            studentRepository.saveAll(course.getStudentlist());
         }
         return courseRepository.save(course);
     }

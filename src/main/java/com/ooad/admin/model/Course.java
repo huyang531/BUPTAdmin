@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"studentlist"})
+//@JsonIgnoreProperties({"studentlist"})
 public class Course {
 
     @Id
