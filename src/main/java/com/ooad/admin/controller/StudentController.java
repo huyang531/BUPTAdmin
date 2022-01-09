@@ -40,17 +40,12 @@ public class StudentController {
     @ResponseBody
     @GetMapping("/teachers")
     public Iterable<Teacher> listTeachers(@RequestParam(name = "studentId") String studentId){
-        if (studentId == null){
-            return teacherRepository.findAll();
+        List<Teacher> teachers = new ArrayList<>();
+        Set<Course> courses =  studentRepository.findById(studentId).get().getCourses();
+        for(Course course : courses){
+            teachers.add(course.getTeacher());
         }
-        else{
-            List<Teacher> teachers = new ArrayList<>();
-            Set<Course> courses =  studentRepository.findById(studentId).get().getCourses();
-            for(Course course : courses){
-                teachers.add(course.getTeacher());
-            }
-            return teachers;
-        }
+        return teachers;
     }
 
     @ResponseBody
